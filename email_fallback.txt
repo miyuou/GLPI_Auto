@@ -1,0 +1,6 @@
+GLPI - Erreur de traitement
+ERREUR sur C:\Users\HUAWEI\Desktop\internship\PGLPI\GLPI_Auto\raw\export_glpi.csv : 'Date création'
+
+GLPI - Erreur de traitement
+ERREUR sur C:\Users\HUAWEI\Desktop\internship\PGLPI\GLPI_Auto\raw\export_glpi.csv : 'utf-8' codec can't decode byte 0xe9 in position 3: invalid continuation byte
+
