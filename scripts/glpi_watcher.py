@@ -33,23 +33,6 @@ def read_csv_file(filepath):
             continue
     raise ValueError(f"Aucun encodage valide pour {filepath}")
 
-def send_alert(subject, body):
-    """Envoi de notification par email"""
-    msg = EmailMessage()
-    msg.set_content(body)
-    msg['Subject'] = subject
-    msg['From'] = "glpi_auto@yourcompany.com"
-    msg['To'] = "admin@yourcompany.com"
-    
-    try:
-        with smtplib.SMTP('smtp.office365.com', 587, timeout=10) as server:
-            server.starttls()
-            server.login("your_email@company.com", "password")
-            server.send_message(msg)
-    except Exception as e:
-        logging.error(f"Erreur email : {str(e)}")
-        with open(os.path.join(BASE_DIR, "email_fallback.txt"), "a", encoding='utf-8') as f:
-            f.write(f"{subject}\n{body}\n\n")
 
 def clean_data(df):
     """Version finale avec nettoyage complet et suppression des colonnes originales"""
@@ -96,11 +79,11 @@ def clean_data(df):
     except Exception as e:
         logging.error(f"ERREUR nettoyage: {str(e)}", exc_info=True)
         raise
-# Replace launch_powerbi() with this:
+
 def launch_powerbi():
     """Open existing dashboard or create new one"""
     dashboard_path = os.path.join(BASE_DIR, "dashboard", "GLPI_Dashboard.pbix")
-    
+    csv_path = os.path.join(BASE_DIR, "processed", "cleaned_latest.csv")
     
     try:
         if os.path.exists(dashboard_path):
@@ -115,7 +98,7 @@ def launch_powerbi():
             # Create new dashboard on first run
             os.makedirs(os.path.dirname(dashboard_path), exist_ok=True)
             subprocess.run(
-                f'"{PBI_PATH}"',
+                f'"{PBI_PATH}" "{csv_path}"',
                 shell=True,
                 check=True,
                 timeout=30
@@ -165,10 +148,7 @@ class GLPI_Handler(FileSystemEventHandler):
                 error_msg = f"ERREUR sur {event.src_path} : {str(e)}"
                 logging.error(error_msg)
                 
-            except Exception as e:
-                error_msg = f"ERREUR sur {event.src_path} : {str(e)}"
-                logging.error(error_msg)
-                send_alert("GLPI - Erreur de traitement", error_msg)
+           
 
 if __name__ == "__main__":
     # Création des dossiers
