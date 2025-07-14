@@ -12,4 +12,4 @@ def fetch_from_api():
 
 if __name__ == "__main__":
     df = fetch_from_api()
-    df.to_csv("C:/GLPI_Auto/processed/cleaned_latest.csv", index=False)
+    df.to_csv("C:/PGLPI/GLPI_Auto/processed/cleaned_latest.csv", index=False)

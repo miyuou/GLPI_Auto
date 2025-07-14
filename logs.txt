@@ -48,3 +48,22 @@ ValueError: Colonnes manquantes: {'Attribué à - Technicien', 'Titre', 'ID', 'D
 2025-07-10 23:08:57,484 - === Service GLPI Auto démarré ===
 2025-07-10 23:09:42,163 - Traitement initial du fichier : export_glpi.csv
 2025-07-10 23:09:42,281 - === Service GLPI Auto démarré ===
+2025-07-11 13:43:16,064 - Traitement initial du fichier : export_glpi.csv
+2025-07-11 13:43:16,196 - === Service GLPI Auto démarré ===
+2025-07-11 14:01:18,148 - Traitement initial du fichier : export_glpi.csv
+2025-07-11 14:01:18,248 - === Service GLPI Auto démarré ===
+2025-07-11 14:02:22,862 - Traitement initial du fichier : export_glpi.csv
+2025-07-11 14:02:22,934 - === Service GLPI Auto démarré ===
+2025-07-11 14:05:50,334 - Traitement initial du fichier : export_glpi.csv
+2025-07-11 14:05:50,404 - === Service GLPI Auto démarré ===
+2025-07-11 14:21:16,941 - Traitement initial du fichier : export_glpi.csv
+2025-07-11 14:21:17,022 - === Service GLPI Auto démarré ===
+2025-07-11 14:26:59,371 - Nouveau fichier détecté : C:\Users\HUAWEI\Desktop\internship\PGLPI\GLPI_Auto\raw\export_glpi.csv
+2025-07-11 14:26:59,372 - Ancien fichier nettoyé supprimé : C:\Users\HUAWEI\Desktop\internship\PGLPI\GLPI_Auto\processed\cleaned_latest.csv
+2025-07-11 14:26:59,373 - ERREUR sur C:\Users\HUAWEI\Desktop\internship\PGLPI\GLPI_Auto\raw\export_glpi.csv : module 'pandas' has no attribute 'read_csv_file'
+2025-07-11 14:27:25,087 - Traitement initial du fichier : export_glpi.csv
+2025-07-11 14:27:25,160 - === Service GLPI Auto démarré ===
+2025-07-11 14:47:30,713 - Traitement initial du fichier : export_glpi.csv
+2025-07-11 14:47:30,817 - === Service GLPI Auto démarré ===
+2025-07-12 00:23:17,844 - Traitement initial du fichier : export_glpi.csv
+2025-07-12 00:23:17,984 - === Service GLPI Auto démarré ===

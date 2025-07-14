@@ -1,17 +1,19 @@
+import csv
 import pandas as pd
 import time
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
+import subprocess
 import logging
 import smtplib
 from email.message import EmailMessage
 import os
-
-# Configuration des chemins
+# CONFIG - CHANGE ONLY THESE VARIABLES FOR DEPLOYMENT
 BASE_DIR = r"C:\Users\HUAWEI\Desktop\internship\PGLPI\GLPI_Auto"
 INPUT_DIR = os.path.join(BASE_DIR, "raw")
 OUTPUT_FILE = os.path.join(BASE_DIR, "processed", "cleaned_latest.csv")
 LOG_FILE = os.path.join(BASE_DIR, "logs.txt")
+PBI_PATH = r"C:\Program Files\Microsoft Power BI Desktop\bin\PBIDesktop.exe"
 
 # Configuration du logging
 logging.basicConfig(
@@ -94,6 +96,33 @@ def clean_data(df):
     except Exception as e:
         logging.error(f"ERREUR nettoyage: {str(e)}", exc_info=True)
         raise
+# Replace launch_powerbi() with this:
+def launch_powerbi():
+    """Open existing dashboard or create new one"""
+    dashboard_path = os.path.join(BASE_DIR, "dashboard", "GLPI_Dashboard.pbix")
+    
+    
+    try:
+        if os.path.exists(dashboard_path):
+            # Open existing dashboard
+            subprocess.run(
+                f'"{PBI_PATH}" "{dashboard_path}"',
+                shell=True,
+                check=True,
+                timeout=30
+            )
+        else:
+            # Create new dashboard on first run
+            os.makedirs(os.path.dirname(dashboard_path), exist_ok=True)
+            subprocess.run(
+                f'"{PBI_PATH}"',
+                shell=True,
+                check=True,
+                timeout=30
+            )
+            logging.info("Please save your dashboard as GLPI_Dashboard.pbix")
+    except Exception as e:
+        logging.error(f"Power BI Error: {str(e)}")
 class GLPI_Handler(FileSystemEventHandler):
     def on_created(self, event):
         if event.src_path.endswith('.csv'):
@@ -105,14 +134,33 @@ class GLPI_Handler(FileSystemEventHandler):
                     logging.info(f"Ancien fichier nettoyé supprimé : {OUTPUT_FILE}")
                 
                 # Lecture et nettoyage
-                df = pd.read_csv_file(event.src_path)
+                df = read_csv_file(event.src_path)  # Use your existing function
                 print("Colonnes détectées:", df.columns.tolist())  # Debug
                 df_clean = clean_data(df)
                 
               # Sauvegarde
-                df_clean.to_csv(OUTPUT_FILE, index=False, encoding='utf-8-sig')
+                output_path = os.path.join(BASE_DIR, "processed", "cleaned_latest.csv")
+               # Update the clean_data saving part:
+                df_clean.to_csv(
+                     OUTPUT_FILE,
+                     index=False,
+                     encoding='utf-8-sig',
+                     sep=',',
+                     quoting=csv.QUOTE_ALL,
+                     date_format='%Y-%m-%d',
+                     line_terminator='\r\n'
+                )
                 logging.info(f"Nouveau fichier nettoyé sauvegardé : {OUTPUT_FILE}")
-                
+                # After saving the CSV
+                if not os.path.exists(output_path):
+                 logging.error("File was not created!")
+                elif os.path.getsize(output_path) == 0:
+                 logging.error("File is empty!")
+                else:
+                # Manually set file type
+                 os.rename(output_path, output_path)  # This refreshes file metadata
+                 logging.info("CSV file verified")
+                launch_powerbi()
             except Exception as e:
                 error_msg = f"ERREUR sur {event.src_path} : {str(e)}"
                 logging.error(error_msg)
